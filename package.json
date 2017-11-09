@@ -1,0 +1,28 @@
+{
+  "name": "dok-ts",
+  "version": "1.0.1",
+  "main": "index.js",
+  "typings": "index",
+  "author": "Dmitry Kalyuk <dmitry@kalyuk.ru>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@types/async": "^2.0.45",
+    "@types/classnames": "^2.2.3",
+    "@types/core-js": "^0.9.43",
+    "@types/lodash": "^4.14.82",
+    "@types/node": "^8.0.50",
+    "lodash": "^4.17.4",
+    "mime-db": "^1.31.0",
+    "mime-type": "^3.0.5",
+    "pug": "^2.0.0-rc.4",
+    "typescript": "^2.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1",
+    "tslint": "^5.8.0"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
+}

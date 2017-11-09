@@ -1,0 +1,12 @@
+.idea
+node_modules
+yarn-error.log
+yarn.lock
+/base
+/console
+/helpers
+/services
+/web
+/index.js
+/index.d.ts
+/modules

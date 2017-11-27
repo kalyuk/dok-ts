@@ -1,6 +1,7 @@
 import { BaseService } from '../base/BaseService';
 import { getApplication } from '../index';
 import { BaseContext } from '../base/BaseContext';
+import { BaseError } from '../base/BaseError';
 
 export interface RouteInterface {
   method?: string;
@@ -80,7 +81,7 @@ export class RouteService extends BaseService {
     });
 
     if (!ctx.route) {
-      throw new Error(`Route: ${ctx.method} ${ctx.url} not found`);
+      throw new BaseError(404, `Route: ${ctx.method} ${ctx.url} not found`);
     }
   }
 }

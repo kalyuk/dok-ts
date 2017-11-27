@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import { ucFirst } from '../helpers/string';
 import { inject } from '../helpers/fn';
 import { BaseContext } from './BaseContext';
+import { BaseError } from './BaseError';
 
 export interface BaseModuleConfig extends BaseComponentConfig {
   controller?: {
@@ -47,7 +48,7 @@ export class BaseModule extends BaseComponent implements BaseModuleInterface {
 
   public getId(): string {
     if (!this.config.id && !this.id) {
-      throw new Error(`id not set in ${this.getClassName()}`);
+      throw new BaseError(500, `id not set in ${this.getClassName()}`);
     }
     return this.config.id || this.id;
   }
@@ -56,7 +57,7 @@ export class BaseModule extends BaseComponent implements BaseModuleInterface {
     const route = ctx.get().route;
     const controller = this.getController(route.controllerName);
     if (!controller[route.actionName + 'Action']) {
-      throw new Error(`Method ${route.actionName}Action in controller '${route.controllerName}' not found`);
+      throw new BaseError(500, `Method ${route.actionName}Action in controller '${route.controllerName}' not found`);
     }
 
     await BaseModule.runBehaviors(ctx, controller);
@@ -77,7 +78,7 @@ export class BaseModule extends BaseComponent implements BaseModuleInterface {
         this.controllers[controllerName].init(controllerName, this);
 
       } else {
-        throw new Error(`Controller ${controllerName} in ${this.getId()} not found`);
+        throw new BaseError(500, `Controller ${controllerName} in ${this.getId()} not found`);
       }
     }
     return this.controllers[controllerName];

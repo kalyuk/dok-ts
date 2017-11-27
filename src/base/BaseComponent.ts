@@ -1,4 +1,5 @@
 import { defaultsDeep } from 'lodash';
+import { BaseError } from './BaseError';
 
 export interface BaseComponentConfig {
   [propName: string]: any;
@@ -25,9 +26,8 @@ export class BaseComponent implements BaseComponentInterface {
 
   public getPath(): string {
     if (!this.config.basePath) {
-      throw new Error(`path not set in ${this.getClassName()}`);
+      throw new BaseError(500, `path not set in ${this.getClassName()}`);
     }
-
     return this.config.basePath;
   }
 

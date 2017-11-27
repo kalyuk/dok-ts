@@ -7,6 +7,7 @@ import { inject } from '../helpers/fn';
 import { LoggerService } from '../services/LoggerService';
 import { BaseContext } from './BaseContext';
 import { StaticModule } from '../modules/StaticModule';
+import { BaseError } from './BaseError';
 
 export interface BaseApplicationConfig extends BaseModuleConfig {
   boot?: string[];
@@ -77,16 +78,16 @@ export class BaseApplication extends BaseModule {
 
   private get(type: string, name: string) {
     if (!this.config[type]) {
-      throw new Error(`${type}, not resolve`);
+      throw new BaseError(500, `${type}, not resolve`);
     }
 
     if (!this.config[type][name]) {
-      throw new Error(`${type}: ${name},  not resolve`);
+      throw new BaseError(500, `${type}: ${name},  not resolve`);
     }
 
     if (!this.config[type][name].$instance) {
       if (!this.config[type][name].path && !this.config[type][name].func) {
-        throw new Error(`${type}: ${name},  undefined`);
+        throw new BaseError(500, `${type}: ${name},  undefined`);
       }
 
       if (this.config[type][name].path) {

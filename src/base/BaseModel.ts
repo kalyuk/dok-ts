@@ -6,9 +6,22 @@ export interface AttributeErrorInterface {
   message: string;
 }
 
-export class BaseModel<T> {
+export interface RuleIterface {
+  fields: string[];
+  rule: string;
+  options?: { [key: string]: any };
+}
 
+export class BaseModel {
   private $errors: Map<string, AttributeErrorInterface> = new Map();
+
+  constructor(values = {}) {
+    this.attributes().forEach((attr) => {
+      if (values[attr] !== undefined) {
+        this.setAttribute(attr, values[attr]);
+      }
+    });
+  }
 
   public addError(attr, error: AttributeErrorInterface) {
     this.$errors.set(attr, error);
@@ -18,11 +31,11 @@ export class BaseModel<T> {
     return Object.getOwnPropertyNames(this).filter((attr) => attr[0] !== '$');
   }
 
-  public async afterValidate(): boolean {
+  public async afterValidate(): Promise<boolean> {
     return true;
   }
 
-  public async beforeValidate(): boolean {
+  public async beforeValidate(): Promise<boolean> {
     return true;
   }
 
@@ -30,17 +43,17 @@ export class BaseModel<T> {
     this.$errors.clear();
   }
 
-  public isBoolean(attr): boolean {
-    if (this[attr] === 'true') {
-      this[attr] = true;
-    } else if (this[attr] === 'false') {
-      this[attr] = false;
+  public isBoolean(attr: string): boolean {
+    if ((this as any)[attr] === 'true') {
+      (this as any)[attr] = true;
+    } else if ((this as any)[attr] === 'false') {
+      (this as any)[attr] = false;
     }
-    return typeof this[attr] === 'boolean';
+    return typeof (this as any)[attr] === 'boolean';
   }
 
-  public required(attr): boolean {
-    return this[attr] !== null && this[attr].length;
+  public required(attr: string): boolean {
+    return (this as any)[attr] !== null && this[attr].length;
   }
 
   public hasErrors(): boolean {
@@ -48,31 +61,32 @@ export class BaseModel<T> {
   }
 
   public hasAttr(attr): boolean {
-    return this[attr] !== undefined && typeof this[attr] !== 'function';
+    return (this as any)[attr] !== undefined && typeof (this as any)[attr] !== 'function';
   }
 
-  public setAttribute() {
+  public setAttribute(attr: string, value: any): void {
     if (this.hasAttr(attr)) {
-      this[attr] = value;
+      (this as any)[attr] = value;
     }
   }
 
-  public async validate(): boolean {
+  public async validate() {
     if (await this.beforeValidate()) {
       return new Promise((resolve, reject) => {
-        each(this.getRules(), (rule, callback) => {
-          each(rule[0], async (attr, $callback) => {
+        each(this.getRules(), (rule: RuleIterface, callback) => {
+          each(rule[0], async (attr: string, $callback) => {
+            const value: string = this[attr];
             if (
               (this[rule[1]] && !await this[rule[1]](attr))
-              || (!this[rule[1]] && Validator[rule[1]] && !Validator[rule[1]](`${this[attr]}`, rule[2] || {}))
+              || (!this[rule[1]] && Validator[rule[1]] && !Validator[rule[1]](value + '', rule[2] || {}))
             ) {
-              this.addError(attr, rule[1], rule[2].message);
+              this.addError(attr, {rule: rule[1], message: rule[2].message});
             }
             $callback();
           }, callback);
         }, async (err) => {
           if (err) {
-            throw new Error(err);
+            throw new Error(err as string);
           }
           if (await this.afterValidate()) {
             return resolve(true);
@@ -88,7 +102,7 @@ export class BaseModel<T> {
     return this.$errors.values();
   }
 
-  public getRules(): [[string[], string, {[key: string]: any}]] {
+  public getRules(): RuleIterface[] {
     return [];
   }
 

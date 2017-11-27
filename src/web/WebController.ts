@@ -1,5 +1,6 @@
 import { ActionResult, BaseController } from '../base/BaseController';
 import { ResponseService } from '../services/ResponseService';
+import { BaseError } from '../base/BaseError';
 
 export class WebController extends BaseController {
 
@@ -11,11 +12,10 @@ export class WebController extends BaseController {
     };
   }
 
-  public renderJSON(statusCode, json, code = 'success'): ActionResult {
+  public renderJSON(statusCode: number, json: { [key: string]: any }, code = 'success'): ActionResult {
     const data: any = {};
-
     if (statusCode > 300 && code === 'success') {
-      throw new Error('Wrong response code');
+      throw new BaseError(500, 'Wrong response code');
     }
 
     data.code = code;

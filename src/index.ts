@@ -1,8 +1,10 @@
+import { BaseError } from './base/BaseError';
+
 const cache: any = {};
 
 export function setApplication(application) {
   if (cache.application) {
-    throw new Error('The application is already running');
+    throw new BaseError(500, 'The application is already running');
   }
   cache.application = application;
 }

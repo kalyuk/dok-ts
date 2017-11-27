@@ -2,6 +2,9 @@ import { ucFirst } from './string';
 import { getService } from '../index';
 
 export function getFnParamNames(fn: Function): string[] {
+  if (!fn) {
+    return [];
+  }
   const fstr = fn.toString();
   if (fstr.match(/function.*?\(.*?\)/)) {
     return fstr.match(/\(.*?\)/)[0]

@@ -35,7 +35,7 @@ export class BaseController implements BaseControllerInterface {
     return [];
   }
 
-  public render(statusCode, body, headers) {
+  public render(statusCode, body, headers?) {
     return {
       statusCode,
       body,

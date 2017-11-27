@@ -63,7 +63,7 @@ export class BaseApplication extends BaseModule {
     return this.get('modules', name);
   }
 
-  public async runRoute(ctx: BaseContext) {
+  public runRoute = async (ctx: BaseContext) => {
     await this.getService('RouteService').matchRoute(ctx);
     return this.getModule(ctx.get().route.moduleName || this.getId()).runAction(ctx);
   }
@@ -98,7 +98,7 @@ export class BaseApplication extends BaseModule {
 
       const args = inject(INSTANCE);
 
-      this.config[type][name].$instance = new INSTANCE(...args);
+      this.config[type][name].$instance = args.length ? new INSTANCE(...args) : new INSTANCE();
 
       this.config[type][name].$instance.configure(this.config[type][name].options || {});
       this.config[type][name].$instance.init();

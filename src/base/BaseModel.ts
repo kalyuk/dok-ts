@@ -64,7 +64,7 @@ export class BaseModel {
 
   public load(values = {}) {
     this.attributes().forEach((attr) => {
-      if (values[attr] !== undefined) {
+      if (values[attr]) {
         this.setAttribute(attr, values[attr]);
       }
     });

@@ -15,14 +15,6 @@ export interface RuleIterface {
 export class BaseModel {
   private $errors: Map<string, AttributeErrorInterface> = new Map();
 
-  constructor(values = {}) {
-    this.attributes().forEach((attr) => {
-      if (values[attr] !== undefined) {
-        this.setAttribute(attr, values[attr]);
-      }
-    });
-  }
-
   public addError(attr, error: AttributeErrorInterface) {
     this.$errors.set(attr, error);
   }
@@ -70,6 +62,14 @@ export class BaseModel {
     }
   }
 
+  public load(values = {}) {
+    this.attributes().forEach((attr) => {
+      if (values[attr] !== undefined) {
+        this.setAttribute(attr, values[attr]);
+      }
+    });
+  }
+
   public async validate() {
     if (await this.beforeValidate()) {
       return new Promise((resolve, reject) => {
@@ -102,7 +102,7 @@ export class BaseModel {
     return this.$errors.values();
   }
 
-  public getRules(): RuleIterface[] {
+  public getRules() {
     return [];
   }
 

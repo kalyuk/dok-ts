@@ -29,6 +29,10 @@ export class BaseModule extends BaseComponent implements BaseModuleInterface {
     controller: {
       dirName: 'controllers',
       ext: '.ts'
+    },
+    models: {
+      dirName: 'models',
+      ext: '.ts'
     }
   };
 
@@ -51,6 +55,18 @@ export class BaseModule extends BaseComponent implements BaseModuleInterface {
       throw new BaseError(500, `id not set in ${this.getClassName()}`);
     }
     return this.config.id || this.id;
+  }
+
+  public getControllersDirPath() {
+    return path.join(
+      this.getPath(),
+      this.config.controller.dirName);
+  }
+
+  public getModelsDirPath() {
+    return path.join(
+      this.getPath(),
+      this.config.models.dirName);
   }
 
   public async runAction(ctx: BaseContext) {

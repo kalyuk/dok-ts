@@ -70,21 +70,23 @@ export class BaseModel {
     });
   }
 
-  public async validate() {
+  public async validate(scope: string = 'default') {
     if (await this.beforeValidate()) {
       return new Promise((resolve, reject) => {
         each(this.getRules(), (rule: RuleIterface, callback) => {
           each(rule[0], async (attr: string, $callback) => {
             const value = this[attr] === null ? '' : this[attr];
             const isFunc = typeof rule[1] === 'function';
-            if (
-              (isFunc && await rule[1](value, attr, this, rule[2]))
-              ||
-              (!isFunc && this[rule[1]] && await this[rule[1]](attr))
-              ||
-              (!isFunc && !this[rule[1]] && Validator[rule[1]] && !Validator[rule[1]](value + '', rule[2] || {}))
-            ) {
-              this.addError(attr, {rule: rule[1], message: rule[2].message});
+            if (!rule[2].scopes || (rule[2].scopes && rule[2].scopes.indexOf(scope) !== -1)) {
+              if (
+                (isFunc && await rule[1](value, attr, this, rule[2]))
+                ||
+                (!isFunc && this[rule[1]] && await this[rule[1]](attr))
+                ||
+                (!isFunc && !this[rule[1]] && Validator[rule[1]] && !Validator[rule[1]](value + '', rule[2] || {}))
+              ) {
+                this.addError(attr, {rule: rule[1], message: rule[2].message});
+              }
             }
             $callback();
           }, callback);

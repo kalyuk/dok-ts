@@ -1,5 +1,6 @@
 import { each } from 'async';
 import * as Validator from 'validator';
+import { type } from 'os';
 
 export interface AttributeErrorInterface {
   rule: string;
@@ -77,6 +78,8 @@ export class BaseModel {
           each(rule[0], async (attr: string, $callback) => {
             const value: string = this[attr];
             if (
+              (typeof rule[1] === 'function' && !await rule[1](value, attr, this, rule[2]))
+              ||
               (this[rule[1]] && !await this[rule[1]](attr))
               || (!this[rule[1]] && Validator[rule[1]] && !Validator[rule[1]](value + '', rule[2] || {}))
             ) {

@@ -68,8 +68,8 @@ export class HttpService extends BaseService {
         const body: ActionResult = {};
         const statusCode = e.code && Number.isInteger(e.code) ? e.code : 500;
 
-        body.code = statusCode;
-        body.message = e.message;
+        body.statusCode = statusCode;
+        body.body = e.message;
         body[statusCode < 300 ? 'data' : 'errors'] = e.fields || {};
 
         return {

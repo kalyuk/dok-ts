@@ -99,7 +99,11 @@ export class BaseModel {
   }
 
   public getErrors() {
-    return this.$errors.values();
+    const errors = {};
+    this.$errors.forEach((item, attr) => {
+      errors[attr] = item.message;
+    });
+    return errors;
   }
 
   public getRules() {

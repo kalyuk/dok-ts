@@ -102,7 +102,7 @@ export class HttpService extends BaseService {
           const type = (request.headers['content-type'] as string).split(';')[0];
           switch (type) {
             case 'application/json':
-              ctx.set(body, JSON.parse(body));
+              ctx.set('body', JSON.parse(body));
               break;
             default:
               if (body && body.length) {

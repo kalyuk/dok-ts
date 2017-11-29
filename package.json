@@ -1,6 +1,6 @@
 {
   "name": "dok-ts",
-  "version": "1.0.16",
+  "version": "1.0.21",
   "main": "index.js",
   "typings": "index",
   "author": "Dmitry Kalyuk <dmitry@kalyuk.ru>",

@@ -80,7 +80,7 @@ export class RouteService extends BaseService {
       return false;
     });
 
-    if (!ctx.route) {
+    if (!ctx.route.controllerName) {
       throw new BaseError(404, `Route: ${ctx.method} ${ctx.url} not found`);
     }
   }

@@ -106,7 +106,7 @@ export class HttpService extends BaseService {
               break;
             default:
               if (body && body.length) {
-                ctx.set(body, q.parse(body));
+                ctx.set('body', q.parse(body));
               }
           }
           resolve();

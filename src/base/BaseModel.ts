@@ -94,7 +94,7 @@ export class BaseModel {
           if (await this.afterValidate()) {
             return resolve(true);
           }
-          return reject();
+          return reject(false);
         });
       });
     }

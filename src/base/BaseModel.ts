@@ -52,6 +52,10 @@ export class BaseModel {
     return this.$errors.size > 0;
   }
 
+  public getHiddenFields(): [] {
+    return [];
+  }
+
   public hasAttr(attr): boolean {
     return (this as any)[attr] !== undefined && typeof (this as any)[attr] !== 'function';
   }
@@ -118,8 +122,10 @@ export class BaseModel {
 
   public getValues() {
     const data = {};
+    const hidden = this.getHiddenFields();
 
     this.attributes()
+      .filter((attr) => hidden.indexOf(attr) === -1)
       .forEach((attr) => {
         data[attr] = this[attr];
       });

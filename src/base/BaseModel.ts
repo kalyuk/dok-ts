@@ -52,7 +52,7 @@ export class BaseModel {
     return this.$errors.size > 0;
   }
 
-  public getHiddenFields(): [] {
+  public getHiddenFields() {
     return [];
   }
 

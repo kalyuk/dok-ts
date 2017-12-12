@@ -130,4 +130,8 @@ export class BaseModel {
 
     return data;
   }
+
+  public toJSON() {
+    return this.getValues();
+  }
 }

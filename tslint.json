@@ -4,6 +4,7 @@
   },
   "extends": "tslint:latest",
   "rules": {
+    "eofline": false,
     "quotemark": [
       true,
       "single",
@@ -39,6 +40,7 @@
     "no-default-export": false,
     "no-empty-interface": true,
     "no-string-throw": true,
+    "no-submodule-imports": false,
     "no-switch-case-fall-through": true,
     "prefer-const": true,
     "space-before-function-paren": [

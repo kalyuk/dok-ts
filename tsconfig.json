@@ -2,8 +2,13 @@
   "compilerOptions": {
     "target": "es5",
     "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noImplicitAny": false,
     "moduleResolution": "node",
+    "module": "commonjs",
     "lib": [
       "es2015",
       "es2017"
@@ -13,11 +18,9 @@
     ],
     "types": [
       "node",
-      "lodash",
-      "core-js",
-      "async"
+      "core-js"
     ],
-    "outDir": "./"
+    "outDir": "./build"
   },
   "exclude": [
     "node_modules"

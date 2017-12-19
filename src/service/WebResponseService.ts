@@ -4,26 +4,25 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as _mime from 'mime-type';
 import * as db from 'mime-db';
-import { ActionResult } from '../base/BaseController';
 
 const mime = _mime(db);
 
-export class ResponseService extends BaseService {
+export class WebResponseService extends BaseService {
   public static types = {
     html: 'text/html',
     json: 'application/json'
   };
 
-  public static options = {
+  public static defaultConfig = {
     body: '',
     headers: {
       'Content-Encoding': 'UTF-8',
-      'Content-Type': ResponseService.types.json
+      'Content-Type': WebResponseService.types.json
     },
     statusCode: 200
   };
 
-  public static renderError(statusCode, errors, message): ActionResult {
+  public static renderError(statusCode, errors, message) {
     return {
       body: JSON.stringify({
         statusCode,
@@ -31,7 +30,7 @@ export class ResponseService extends BaseService {
         message
       }),
       headers: {
-        'Content-Type': ResponseService.types.json
+        'Content-Type': WebResponseService.types.json
       },
       statusCode
     };

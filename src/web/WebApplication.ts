@@ -1,30 +1,23 @@
 import { BaseApplication } from '../base/BaseApplication';
-import { HttpService } from '../services/HttpService';
-import { ResponseService } from '../services/ResponseService';
-import { PugService } from '../services/PugService';
+import { HttpService } from '../service/HttpService';
+import { WebResponseService } from '../service/WebResponseService';
+import { di } from '../decorator/di';
 import { BaseContext } from '../base/BaseContext';
 
+@di('HttpService')
 export class WebApplication extends BaseApplication {
-  public static options = {
+  public static defaultConfig = {
     services: {
       HttpService: {
         func: HttpService
       },
-      ResponseService: {
-        func: ResponseService
-      },
-      PugService: {
-        func: PugService
+      WebResponseService: {
+        func: WebResponseService
       }
     }
   };
 
   private httpService: HttpService;
-
-  public init() {
-    super.init();
-    this.httpService = this.getService('HttpService');
-  }
 
   public listen() {
     this.init();

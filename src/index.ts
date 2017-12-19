@@ -1,5 +1,11 @@
 import { BaseError } from './base/BaseError';
 
+export * from './base';
+export * from './web';
+export * from './console';
+export * from './service';
+export * from './decorator';
+
 const cache: any = {};
 
 export function setApplication(application) {

@@ -8,14 +8,13 @@ export const LOG_LEVEL = {
   RENDER: 4
 };
 
-
-export class LoggerService extends BaseService {
-  public static options = {
+export class LogService extends BaseService {
+  public static defaultConfig = {
     logLevel: LOG_LEVEL.INFO
   };
 
-  public render(type, ...args) {
-    if (this.config.logLevel <= type) {
+  public render(logLevel, ...args) {
+    if (this.config.logLevel <= logLevel) {
       console.log.apply(console, args);
     }
   }

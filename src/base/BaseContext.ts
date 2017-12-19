@@ -1,5 +1,3 @@
-import { RouteInterface } from '../services/RouteService';
-
 export interface BaseContextInterface {
   body?: { [key: string]: string | string[] };
   content?: string;

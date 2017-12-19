@@ -1,37 +1,38 @@
 import { BaseService } from '../base/BaseService';
 import * as http from 'http';
-import { LOG_LEVEL, LoggerService } from './LoggerService';
-import { BaseContext } from '../base/BaseContext';
+import { di } from '../decorator/di';
+import { LOG_LEVEL, LogService } from './LogService';
+import { WebResponseService } from './WebResponseService';
 import { parse, URL } from 'url';
 import * as q from 'querystring';
-import { ActionResult } from '../base/BaseController';
-import { ResponseService } from './ResponseService';
+import { BaseContext } from '../base/BaseContext';
 
+@di('LogService', 'WebResponseService')
 export class HttpService extends BaseService {
-  public static options = {
+  public static defaultConfig = {
     host: '0.0.0.0',
     maxPostBodyLen: 1e6,
     port: 1987,
     timeout: 30
   };
 
+  private loggerService: LogService;
+  private webResponseService: WebResponseService;
   private server: http.Server;
 
-  constructor(private responseService: ResponseService,
-              private loggerService: LoggerService) {
-    super();
-  }
-
-  public init() {
+  public async init() {
     super.init();
     this.server = http.createServer();
     this.server.timeout = this.config.timeout * 1000;
-    return new Promise((resolve) => {
+
+    await new Promise((resolve) => {
       this.server.listen(this.config.port, this.config.host, resolve);
-    }).then(() => {
-      const MESSAGE = `==> Listening on port ${this.config.port}. Open up http://${this.config.host}:${this.config.port}/ in your browser.`;
-      this.loggerService.render(LOG_LEVEL.INFO, MESSAGE);
     });
+
+    const MESSAGE = `==> Listening on port ${this.config.port}. Open up http://${this.config.host}:${this.config.port}/ in your browser.`;
+    this.loggerService.render(LOG_LEVEL.INFO, MESSAGE);
+
+    return this;
   }
 
   public onClose(callback) {
@@ -57,7 +58,7 @@ export class HttpService extends BaseService {
     });
 
     if (u.query) {
-      ctx.get().route.params = q.parse(u.query);
+      ctx.get().route.params = q.parse(u.query as string);
     }
 
     this.readBody(ctx, request)
@@ -65,7 +66,7 @@ export class HttpService extends BaseService {
         return callback(ctx);
       })
       .catch((e) => {
-        const body: ActionResult = {};
+        const body: any = {};
         const statusCode = e.code && Number.isInteger(e.code) ? e.code : 500;
 
         body.statusCode = statusCode;
@@ -75,16 +76,16 @@ export class HttpService extends BaseService {
         return {
           body: JSON.stringify(body),
           headers: {
-            'Content-Type': ResponseService.types.json
+            'Content-Type': WebResponseService.types.json
           },
           statusCode
         };
       })
       .then((data) => {
         if (data.filePath) {
-          return this.responseService.renderFile(response, data);
+          return this.webResponseService.renderFile(response, data);
         }
-        return this.responseService.render(response, data);
+        return this.webResponseService.render(response, data);
       });
   }
 

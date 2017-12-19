@@ -1,7 +1,0 @@
-{
-  "exec": "ts-node",
-  "ext": "ts",
-  "ignore": [
-    "node_modules"
-  ]
-}

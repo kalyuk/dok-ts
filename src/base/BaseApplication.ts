@@ -1,34 +1,16 @@
-import { BaseModule, BaseModuleConfig } from './BaseModule';
-import { RouteService } from '../services/RouteService';
+import { BaseModule } from './BaseModule';
 import { setApplication } from '../index';
 import { defaultsDeep } from 'lodash';
-import * as path from 'path';
-import { inject } from '../helpers/fn';
-import { LoggerService } from '../services/LoggerService';
-import { BaseContext } from './BaseContext';
-import { StaticModule } from '../modules/StaticModule';
+import { LogService } from '../service/LogService';
 import { BaseError } from './BaseError';
 
-export interface BaseApplicationConfig extends BaseModuleConfig {
-  boot?: string[];
-  services?: { [propName: string]: any };
-  modules?: { [propName: string]: any };
-}
-
 export class BaseApplication extends BaseModule {
-  public static options: BaseApplicationConfig = {
+
+  public static defaultConfig = {
     boot: [],
     services: {
-      LoggerService: {
-        func: LoggerService
-      },
-      RouteService: {
-        func: RouteService
-      }
-    },
-    modules: {
-      StaticModule: {
-        func: StaticModule
+      LogService: {
+        func: LogService
       }
     }
   };
@@ -38,7 +20,7 @@ export class BaseApplication extends BaseModule {
     port: 1987
   };
 
-  constructor(configPath) {
+  constructor(configurations) {
     super();
     setApplication(this);
 
@@ -47,14 +29,20 @@ export class BaseApplication extends BaseModule {
       this.arguments[tmp[0]] = tmp[1];
     });
 
-    const configurations = require(configPath).default();
     const config = defaultsDeep(configurations[this.arguments.env] || {}, configurations.default);
 
     this.configure(config);
   }
 
-  public getService(name) {
-    return this.get('services', name);
+  public getService(name: string) {
+    const service = this.get('services', name);
+
+    if (!service.isInit) {
+      service.init();
+      service.isInit = true;
+    }
+
+    return service;
   }
 
   public getModule(name) {
@@ -62,18 +50,6 @@ export class BaseApplication extends BaseModule {
       return this;
     }
     return this.get('modules', name);
-  }
-
-  public runRoute = async (ctx: BaseContext) => {
-    await this.getService('RouteService').matchRoute(ctx);
-    return this.getModule(ctx.get().route.moduleName || this.getId()).runAction(ctx);
-  }
-
-  public init() {
-    super.init();
-    this.config.boot.forEach((serviceName) => {
-      this.getService(serviceName);
-    });
   }
 
   private get(type: string, name: string) {
@@ -90,19 +66,9 @@ export class BaseApplication extends BaseModule {
         throw new BaseError(500, `${type}: ${name},  undefined`);
       }
 
-      if (this.config[type][name].path) {
-        const NAME = this.config[type][name].path.split(path.sep).pop();
-        this.config[type][name].func = require(this.config[type][name].path)[NAME];
-      }
-
       const INSTANCE = this.config[type][name].func;
-
-      const args = inject(INSTANCE);
-
-      this.config[type][name].$instance = args.length ? new INSTANCE(...args) : new INSTANCE();
-
+      this.config[type][name].$instance = new INSTANCE();
       this.config[type][name].$instance.configure(this.config[type][name].options || {});
-      this.config[type][name].$instance.init();
     }
 
     return this.config[type][name].$instance;

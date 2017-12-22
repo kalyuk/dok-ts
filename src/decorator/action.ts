@@ -1,4 +1,4 @@
-import { getService } from '../index';
+import { getService } from '..';
 import { PropsType, RouteService } from '../service';
 
 export interface Action {

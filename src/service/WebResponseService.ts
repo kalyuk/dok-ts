@@ -31,13 +31,20 @@ export class WebResponseService extends BaseService {
   }
 
   public render(response, content) {
-    const result = defaultsDeep(content, this.config);
+    const data = content.body ? content : {body: content};
+    const result = defaultsDeep(data, this.config);
 
     if (result.statusCode === 301 || result.statusCode === 302) {
       response.statusCode = result.statusCode;
       response.setHeader('Location', result.body);
       response.setHeader('Content-Type', 'plain/text');
       return response.end();
+    }
+
+    const body = typeof result.body === 'object' ? JSON.stringify(result.body) : result.body;
+
+    if (typeof result.body === 'object') {
+      response.setHeader('Content-Type', WebResponseService.types.json);
     }
 
     Object.keys(result.headers || {}).forEach((headerName) => {
@@ -51,8 +58,8 @@ export class WebResponseService extends BaseService {
     });
 
     response.statusCode = result.statusCode;
-    response.setHeader('Content-Length', Buffer.byteLength(result.body).toString());
-    response.write(result.body);
+    response.setHeader('Content-Length', Buffer.byteLength(body).toString());
+    response.write(body);
     return response.end();
   }
 }

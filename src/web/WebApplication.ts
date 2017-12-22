@@ -1,6 +1,8 @@
 import { HttpService, WebResponseService } from '../service';
 import { BaseApplication, BaseContext } from '../base';
+import { di } from '../decorator';
 
+@di('HttpService')
 export class WebApplication extends BaseApplication {
   public static defaultConfig = {
     services: {

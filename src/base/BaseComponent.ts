@@ -20,10 +20,15 @@ export class BaseComponent {
 
   public configure(config) {
     this.config = defaultsDeep(config, this.getConfig(), this.deepConfigure(this.constructor));
+    this.$inject();
   }
 
   // tslint:disable-next-line
   public pre() {
+
+  }
+  // tslint:disable-next-line
+  public $inject() {
 
   }
 

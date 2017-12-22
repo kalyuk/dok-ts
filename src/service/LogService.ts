@@ -14,7 +14,7 @@ export class LogService extends BaseService {
     logger: console.log
   };
 
-  public render(logLevel, ...args: any[]) {
+  public render = (logLevel, ...args: any[]) => {
     if (this.config.logLevel <= logLevel) {
       this.config.logger(...args);
     }

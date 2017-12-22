@@ -16,7 +16,7 @@ export class HttpService extends BaseService {
     timeout: 30
   };
 
-  private loggerService: LogService;
+  private logService: LogService;
   private responseService: WebResponseService;
   private server: http.Server;
 
@@ -29,7 +29,7 @@ export class HttpService extends BaseService {
       this.server.listen(this.config.port, this.config.host, resolve);
     });
 
-    this.loggerService.render(LOG_LEVEL.INFO, `==> Listening on port ${this.config.port}.`);
+    this.logService.render(LOG_LEVEL.INFO, `==> Listening on port ${this.config.port}.`);
 
     return this;
   }

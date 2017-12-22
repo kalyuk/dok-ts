@@ -1,31 +1,31 @@
 {
   "name": "dok-ts",
-  "version": "2.0.0",
+  "version": "2.0.14",
   "main": "build/index.js",
   "license": "MIT",
   "author": "Dmitry Kalyuk <dmitry@kalyuk.ru>",
   "scripts": {
     "prepublish": "yarn build",
-    "build": "webpack",
-    "build:dev": "webpack --watch",
+    "build": "tsc",
     "dev": "nodemon ./bin/server.js",
     "ts:dev": "ts-node ./src/bin/server.ts",
     "test": "nyc --extension=.ts --lines 60 --per-file mocha --require ts-node/register ./src/**/__tests__/*.spec.ts ",
     "test:watch": "mocha --require ts-node/register ./src/**/__tests__/*.spec.ts --watch --watch-extensions ts"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.91",
+    "@types/mocha": "^2.2.44",
     "@types/node": "^8.5.2",
     "lodash": "^4.17.4",
-    "ts-loader": "^3.2.0",
-    "ts-node": "^4.0.2",
-    "typescript": "^2.6.2",
-    "uglifyjs-webpack-plugin": "^1.1.4",
-    "webpack": "^3.10.0",
-    "webpack-node-externals": "^1.6.0",
-    "@types/mocha": "^2.2.44",
     "mocha": "^4.0.1",
     "nodemon": "^1.14.1",
     "nyc": "^11.4.1",
-    "tslint": "^5.8.0"
+    "ts-loader": "^3.2.0",
+    "ts-node": "^4.0.2",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.2",
+    "uglifyjs-webpack-plugin": "^1.1.4",
+    "webpack": "^3.10.0",
+    "webpack-node-externals": "^1.6.0"
   }
 }

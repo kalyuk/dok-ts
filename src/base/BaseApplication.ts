@@ -1,10 +1,9 @@
 import { BaseModule } from './BaseModule';
 import { defaultsDeep } from 'lodash';
 import { BaseError } from './BaseError';
-import { LogService } from '../service/LogService';
-import { setApplication } from '../index';
+import { LogService, RouteService } from '../service';
+import { setApplication } from '../';
 import { BaseContext } from './BaseContext';
-import { RouteService } from '../service/RouteService';
 
 export class BaseApplication extends BaseModule {
   public static defaultConfig: any = {

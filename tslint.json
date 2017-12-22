@@ -36,6 +36,7 @@
       "static-before-instance",
       "variables-before-functions"
     ],
+    "no-implicit-dependencies": false,
     "no-angle-bracket-type-assertion": true,
     "no-default-export": false,
     "no-empty-interface": true,

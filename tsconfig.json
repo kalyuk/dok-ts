@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "lib": [
+      "es2015",
+      "es2017"
+    ],
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "outDir": "./build"
+  },
+  "exclude": [
+    "node_modules",
+    "*.spec.ts"
+  ],
+  "include": [
+    "./src/**/*"
+  ],
+  "filesGlob": [
+    "./**/*.ts",
+    "!./node_modules/**/*.ts"
+  ]
+}

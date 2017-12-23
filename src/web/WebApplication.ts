@@ -1,4 +1,4 @@
-import { HttpService, WebResponseService } from '../service';
+import { HttpService, WebResponseService, SwaggerService, CorsService } from '../service';
 import { BaseApplication, BaseContext } from '../base';
 import { di } from '../decorator';
 
@@ -6,6 +6,12 @@ import { di } from '../decorator';
 export class WebApplication extends BaseApplication {
   public static defaultConfig = {
     services: {
+      SwaggerService: {
+        func: SwaggerService
+      },
+      CorsService: {
+        func: CorsService
+      },
       HttpService: {
         func: HttpService
       },

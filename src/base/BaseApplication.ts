@@ -32,6 +32,13 @@ export class BaseApplication extends BaseModule {
     });
     const config = defaultsDeep(configurations[this.arguments.env] || {}, configurations.default);
     this.configure(config);
+    this.afterConfigure();
+  }
+
+  public afterConfigure() {
+    this.config.boot.forEach((serviceName) => {
+      this.getService(serviceName);
+    });
   }
 
   public getService(name: string) {

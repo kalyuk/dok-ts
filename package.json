@@ -1,7 +1,7 @@
 {
   "name": "dok-ts",
-  "version": "2.0.14",
-  "main": "build/index.js",
+  "version": "2.0.28",
+  "main": "index.js",
   "license": "MIT",
   "author": "Dmitry Kalyuk <dmitry@kalyuk.ru>",
   "scripts": {
@@ -27,5 +27,8 @@
     "uglifyjs-webpack-plugin": "^1.1.4",
     "webpack": "^3.10.0",
     "webpack-node-externals": "^1.6.0"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.10"
   }
 }
